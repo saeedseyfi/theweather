@@ -1,5 +1,5 @@
-# The Weather
-Helps to find the best days to take vacation based on weather ;)
+# How's the Weather for Vacation?
+This script helps to find the best days in next two weeks to take vacation based on weather.
 
 ## Setup
 Prerequisites: git & [deno](https://deno.land/)
