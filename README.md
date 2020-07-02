@@ -11,15 +11,21 @@ Then get your api key from https://developer.climacell.co and make your .env fil
 
 ## Run
 ```shell script
-deno run\
-  --allow-net=api.climacell.co\   # allows request to api 
-  --allow-read=.\                 # allows reading current directory (.env files)
-  --allow-env\                    # allows access to env variables
-  mod.ts\                         # script file
-  lat=59.432291\                  # location latitude
-  lon=18.089190\                  # location longitude
-  days=14\                        # optional - number of days to check (max 14)
-  temp=20\                        # optional - min temperature (ºC) 
-  precip=1                        # optional - max precipitation (mm/hr) 
+deno run --allow-net=api.climacell.co --allow-read=. --allow-env mod.ts lat=59.000000 lon=18.000000 
 ```
-You can set alias for your command to check vacation-friendly days ;)
+Params:
+```text
+# required
+--allow-net    # allows http request to api 
+--allow-read   # allows reading current directory (.env files)
+--allow-env    # allows access to env variables
+mod.ts         # main script file
+lat=59.000000  # location latitude
+lon=18.000000  # location longitude
+
+# optional
+days=14        # number of days to check (max 14)
+temp=20        # min temperature (ºC) 
+precip=1       # max precipitation (mm/hr)
+```
+You can make your command set an alias for to check vacation-friendly days ;)
