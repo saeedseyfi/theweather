@@ -79,11 +79,20 @@ const sunnyDays = await findSunnyDays(
   Number(precip),
 );
 
-console.table(
-  sunnyDays.map(({ date, maxPrecip, maxTemp, minTemp }) => ({
-    "Date": new Date(date).toDateString(),
-    "Highest Temp (C)": maxTemp,
-    "Lowest Temp (C)": minTemp,
-    "Highest Precip (mm/hr)": maxPrecip,
-  })),
+console.log(
+  `You asked to find the dates in coming ${days} days that is above ${temp}ºC and bellow ${precip}mm/hr precipitation.`,
 );
+
+if (sunnyDays.length > 0) {
+  console.table(
+    sunnyDays.map(({ date, maxPrecip, maxTemp, minTemp }) => ({
+      "Date": new Date(date).toDateString(),
+      "Highest Temp (C)": maxTemp,
+      "Lowest Temp (C)": minTemp,
+      "Highest Precip (mm/hr)": maxPrecip,
+    })),
+  );
+} else {
+  console.error(`Oops no date matched the given criteria.`);
+  Deno.exit(1);
+}
