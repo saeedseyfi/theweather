@@ -1,29 +1,16 @@
 import config from "./config.ts";
 import args from "./args.ts";
 import { stringify } from "./qs.ts";
+import { DayForecast, Observation } from "./types.d.ts";
 
 const DAY_MS = 1000 * 60 * 60 * 24;
 const { CLIMACELL_APIKEY } = config;
-
-type ObservationValue = { value: number; units: "C" | "F" };
-type Observation = {
-  observation_time: string;
-  min?: ObservationValue;
-  max?: ObservationValue;
-};
-type Day = {
-  temp: Observation[];
-  precipitation: Observation[];
-  observation_time: { value: string };
-  lat: number;
-  lon: number;
-};
 
 function forecast(
   lat: string | number,
   lon: string | number,
   days: number = 7,
-): Promise<Day[]> {
+): Promise<DayForecast[]> {
   return fetch(
     `https://api.climacell.co/v3/weather/forecast/daily?${
       stringify({
@@ -53,7 +40,7 @@ function forecast(
 }
 
 async function findSunnyDays(
-  days: Day[],
+  days: DayForecast[],
   desiredMinTemp: number,
   desiredMaxPrecip: number,
 ) {
