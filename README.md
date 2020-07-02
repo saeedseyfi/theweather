@@ -2,26 +2,25 @@
 This script helps to find the best days in next two weeks to take vacation based on weather.
 
 ## Setup
-Prerequisites: git & [deno](https://deno.land/)
+Prerequisites: git, [deno](https://deno.land/) and [ClimaCell API Key](https://developer.climacell.co)
 ```shell script
 git clone git@github.com:saeedseyfi/theweather.git
-cd theweather
+echo CLIMACELL_APIKEY=your-api-key >> theweather/.env
 ```
-Then get your api key from https://developer.climacell.co and make your .env file based on example.
 
 ## Run
 ```shell script
-deno run --allow-net=api.climacell.co --allow-read=. --allow-env mod.ts lat=59.000000 lon=18.000000 
+deno run --allow-net=api.climacell.co --allow-read=. --allow-env mod.ts lat=59.3268711 lon=18.0702666 
 ```
 Params:
 ```text
 # required
---allow-net    # allows http request to api 
---allow-read   # allows reading current directory (.env files)
---allow-env    # allows access to env variables
-mod.ts         # main script file
-lat=59.000000  # location latitude
-lon=18.000000  # location longitude
+--allow-net     # allows http request to api 
+--allow-read    # allows reading current directory (.env files)
+--allow-env     # allows access to env variables
+mod.ts          # main script file
+lat=59.3268711  # location latitude
+lon=18.0702666  # location longitude
 
 # optional
 days=14        # number of days to check (max 14)
