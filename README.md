@@ -27,4 +27,4 @@ days=14        # number of days to check (max 14)
 temp=20        # min temperature (ºC) 
 precip=1       # max precipitation (mm/hr)
 ```
-You can make your command set an alias for to check vacation-friendly days ;)
+You can make your command set an alias to check your vacation-friendly days ;)
