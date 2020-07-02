@@ -2,12 +2,12 @@
 Helps to find the best days to take vacation based on weather ;)
 
 ## Setup
-Prerequisites: git and [deno](https://deno.land/)
+Prerequisites: git & [deno](https://deno.land/)
 ```shell script
 git clone git@github.com:saeedseyfi/theweather.git
 cd theweather
-echo CLIMACELL_APIKEY=HERE > .env # get your api key from https://developer.climacell.co and paste "HERE"
 ```
+Then get your api key from https://developer.climacell.co and make your .env file based on example.
 
 ## Run
 ```shell script
