@@ -59,17 +59,20 @@ async function findSunnyDays(
 ) {
   return days
     .map(({ temp, precipitation, observation_time }) => {
-      const reduceObservation = (threshold: number) =>
-        (max: number, observation: Observation) => {
-          const value = observation.max?.value || 0;
-          const maxPassed = value >= max;
-          return maxPassed ? value : max;
-        };
+      const maxObservation = (max: number, observation: Observation) => {
+        const value = observation?.max?.value || max;
+        return value >= max ? value : max;
+      };
+      const minObservation = (min: number, observation: Observation) => {
+        const value = observation?.min?.value || min;
+        return value <= min ? value : min;
+      };
 
       return {
         date: observation_time.value,
-        maxTemp: temp.reduce(reduceObservation(desiredMinTemp), 0),
-        maxPrecip: precipitation.reduce(reduceObservation(desiredMaxPrecip), 0),
+        minTemp: temp.reduce(minObservation, 100),
+        maxTemp: temp.reduce(maxObservation, -100),
+        maxPrecip: precipitation.reduce(maxObservation, 0),
       };
     })
     .filter(({ maxTemp, maxPrecip }) =>
@@ -89,8 +92,11 @@ const sunnyDays = await findSunnyDays(
   Number(precip),
 );
 
-console.table(sunnyDays.map(({ date, maxPrecip, maxTemp }) => ({
-  "Date": new Date(date).toDateString(),
-  "Highest Temp (C)": maxTemp,
-  "Highest Precip (mm/hr)": maxPrecip,
-})));
+console.table(
+  sunnyDays.map(({ date, maxPrecip, maxTemp, minTemp }) => ({
+    "Date": new Date(date).toDateString(),
+    "Highest Temp (C)": maxTemp,
+    "Lowest Temp (C)": minTemp,
+    "Highest Precip (mm/hr)": maxPrecip,
+  })),
+);
