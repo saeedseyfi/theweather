@@ -1,7 +1,7 @@
-import config from "./config.ts";
-import args from "./args.ts";
-import { stringify } from "./qs.ts";
-import { DayForecast, Observation } from "./types.d.ts";
+import config from "./lib/config.ts";
+import args from "./lib/args.ts";
+import { stringify } from "./lib/qs.ts";
+import { DayForecast, Observation } from "./lib/types.ts";
 
 const DAY_MS = 1000 * 60 * 60 * 24;
 const { CLIMACELL_APIKEY } = config;
