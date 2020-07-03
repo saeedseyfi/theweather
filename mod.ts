@@ -92,6 +92,10 @@ if (sunnyDays.length > 0) {
       "Highest Precip (mm/hr)": maxPrecip,
     })),
   );
+  console.log(
+    "More details:",
+    `https://weather.com/weather/monthly/l/${lat},${lon}`,
+  );
 } else {
   console.error(`Oops no date matched the given criteria.`);
   Deno.exit(1);
