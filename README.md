@@ -1,6 +1,8 @@
 # How's the Weather for Vacation?
 This script helps to find the best days in next two weeks to take vacation based on weather.
 
+![Output Screenshot](https://github.com/saeedseyfi/theweather/raw/master/assets/output.png)
+
 ## Setup
 Prerequisites: git, [deno](https://deno.land/) and [ClimaCell api key](https://developer.climacell.co)
 ```shell script
