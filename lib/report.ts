@@ -18,7 +18,7 @@ export default (request: Request, report: Report) => {
         "Date",
         "Overall condition",
         "High / Low (ºC)",
-        "Total Precip (mm)",
+        "Total precip (mm)",
       ],
     });
 
