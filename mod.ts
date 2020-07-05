@@ -1,9 +1,11 @@
 import config from "./lib/config.ts";
 import args from "./lib/args.ts";
 import { stringify } from "./lib/qs.ts";
+import { parse } from "./lib/condition-code.ts";
+import { DAY_MS } from "./lib/constants.ts";
+import report from "./lib/report.ts";
 import { DayForecast, Observation } from "./lib/types.ts";
 
-const DAY_MS = 1000 * 60 * 60 * 24;
 const { CLIMACELL_APIKEY } = config;
 
 function forecast(
@@ -17,7 +19,13 @@ function forecast(
         lat,
         lon,
         end_time: (new Date(Date.now() + DAY_MS * days)).toISOString(),
-        fields: ["temp", "precipitation"],
+        fields: [
+          "weather_code",
+          "temp",
+          "precipitation_accumulation",
+          "feels_like",
+          "wind_speed",
+        ],
         apikey: CLIMACELL_APIKEY,
       })
     }`,
@@ -39,31 +47,44 @@ function forecast(
     });
 }
 
-async function findSunnyDays(
+async function filter(
   days: DayForecast[],
   desiredMinTemp: number,
   desiredMaxPrecip: number,
 ) {
   return days
-    .map(({ temp, precipitation, observation_time }) => {
-      const maxObservation = (max: number, observation: Observation) => {
-        const value = observation?.max?.value || max;
-        return value >= max ? value : max;
-      };
-      const minObservation = (min: number, observation: Observation) => {
-        const value = observation?.min?.value || min;
-        return value <= min ? value : min;
-      };
+    .map(
+      (
+        {
+          temp,
+          precipitation_accumulation,
+          observation_time,
+          feels_like,
+          weather_code,
+        },
+      ) => {
+        const maxObservation = (max: number, observation: Observation) => {
+          const value = observation?.max?.value || max;
+          return value >= max ? value : max;
+        };
+        const minObservation = (min: number, observation: Observation) => {
+          const value = observation?.min?.value || min;
+          return value <= min ? value : min;
+        };
 
-      return {
-        date: observation_time.value,
-        minTemp: temp.reduce(minObservation, 100),
-        maxTemp: temp.reduce(maxObservation, -100),
-        maxPrecip: precipitation.reduce(maxObservation, 0),
-      };
-    })
-    .filter(({ maxTemp, maxPrecip }) =>
-      maxTemp >= desiredMinTemp && maxPrecip <= desiredMaxPrecip
+        return {
+          date: new Date(observation_time.value),
+          condition: parse(weather_code.value),
+          minTemp: Math.round(temp.reduce(minObservation, 100)),
+          maxTemp: Math.round(temp.reduce(maxObservation, -100)),
+          minFeels: Math.round(feels_like.reduce(minObservation, 100)),
+          maxFeels: Math.round(feels_like.reduce(maxObservation, -100)),
+          accPrecip: precipitation_accumulation.value,
+        };
+      },
+    )
+    .filter(({ maxTemp, accPrecip }) =>
+      maxTemp >= desiredMinTemp && accPrecip <= desiredMaxPrecip
     );
 }
 
@@ -73,30 +94,10 @@ if (!lat || !lon) {
   throw new Error("lat/lon args are required");
 }
 
-const sunnyDays = await findSunnyDays(
+const filteredDays = await filter(
   await forecast(lat, lon, Number(days)),
   Number(temp),
   Number(precip),
 );
 
-console.log(
-  `You asked to find the dates in coming ${days} days that is above ${temp}ºC and bellow ${precip}mm/hr precipitation.`,
-);
-
-if (sunnyDays.length > 0) {
-  console.table(
-    sunnyDays.map(({ date, maxPrecip, maxTemp, minTemp }) => ({
-      "Date": new Date(date).toDateString(),
-      "Highest Temp (C)": maxTemp,
-      "Lowest Temp (C)": minTemp,
-      "Highest Precip (mm/hr)": maxPrecip,
-    })),
-  );
-  console.log(
-    "More details:",
-    `https://weather.com/weather/monthly/l/${lat},${lon}`,
-  );
-} else {
-  console.error(`Oops no date matched the given criteria.`);
-  Deno.exit(1);
-}
+await report({ lat, lon, days, temp, precip }, filteredDays);
