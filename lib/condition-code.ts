@@ -81,7 +81,8 @@ const getEmoji = (rawCode: string) => {
 
 export const parse = (code: string) => {
   const normalizedCode = normalize(code);
-  const emoji = getEmoji(code);
+  // const emoji = getEmoji(code);
 
-  return `${emoji ? `${emoji} ` : ""}${normalizedCode}`;
+  // return `${emoji ? `${emoji} ` : ""}${normalizedCode}`; // emoji rendering issue
+  return normalizedCode;
 };
