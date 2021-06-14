@@ -1,6 +1,4 @@
-import AsciiTable, {
-  AsciiAlign,
-} from "https://deno.land/x/ascii_table@v0.1.0/mod.ts";
+import AsciiTable from "https://deno.land/x/ascii_table@v0.1.0/mod.ts";
 import { DAY_MS } from "./constants.ts";
 import { Report, Request } from "./types.ts";
 
@@ -11,34 +9,31 @@ export default (request: Request, report: Report) => {
   const { days, temp, precip, lat, lon } = request;
 
   if (report.length > 0) {
-    const table = new AsciiTable(
-      `Dates in coming ${days} days that are above ${temp}ºC that have bellow ${precip}mm/hr precipitation.`,
-    )
-      .setHeadingAlign(AsciiAlign.CENTER)
-      .setHeading(
+    const table = new AsciiTable().parse({
+      title:
+        `Dates in coming ${days} days that are above ${temp}ºC that have bellow ${precip}mm/hr precipitation.`,
+      heading: [
         "Date",
         "Overall condition",
         "High / Low (ºC)",
         "Total precip (mm)",
-      );
-
-    report.forEach(({
-      date,
-      condition,
-      accPrecip,
-      maxTemp,
-      minTemp,
-      minFeels,
-      maxFeels,
-    }) => {
-      table.addRow(
+      ],
+      rows: report.map(({
+        date,
+        condition,
+        accPrecip,
+        maxTemp,
+        minTemp,
+        minFeels,
+        maxFeels,
+      }) => [
         `${date.toDateString()} (+${
           Math.round((date.getTime() - Date.now()) / DAY_MS)
         } days)`,
         condition,
         `${printTemp(maxTemp, maxFeels)} / ${printTemp(minTemp, minFeels)}`,
         accPrecip,
-      );
+      ]),
     });
 
     console.log(table.toString());
