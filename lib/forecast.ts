@@ -4,7 +4,7 @@ import { DAY_MS } from "./constants.ts";
 import { parse } from "./weather-code.ts";
 import config from "./config.ts";
 
-const { CLIMACELL_APIKEY } = config;
+const { TOMORROW_APIKEY } = config;
 
 export function forecast(
   lat: string | number,
@@ -33,7 +33,7 @@ export function forecast(
         startTime: (new Date()).toISOString(),
         endTime: (new Date(Date.now() + DAY_MS * days)).toISOString(),
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        apikey: CLIMACELL_APIKEY,
+        apikey: TOMORROW_APIKEY,
       },
     }),
     { headers: { "content-type": "application/json" } },

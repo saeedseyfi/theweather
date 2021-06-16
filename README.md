@@ -8,11 +8,11 @@ on weather.
 ## Setup
 
 Prerequisites: git, [deno](https://deno.land/) and
-[ClimaCell api key](https://developer.climacell.co)
+[tomorrow.io api key](https://docs.tomorrow.io/reference/welcome)
 
 ```shell script
 git clone git@github.com:saeedseyfi/theweather.git
-echo CLIMACELL_APIKEY=your-api-key >> theweather/.env
+echo TOMORROW_APIKEY=your-api-key >> theweather/.env
 ```
 
 ## Run
