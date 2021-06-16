@@ -1,9 +1,10 @@
 import AsciiTable from "https://deno.land/x/ascii_table@v0.1.0/mod.ts";
 import { DAY_MS } from "./constants.ts";
 import { Report, Request } from "./types.ts";
+import { today } from "./utils.ts";
 
 const printTemp = (temp: number, feels: number) =>
-  temp !== feels ? `${temp} (feels like ${feels})` : temp;
+  temp !== feels ? `${temp} (feels ${feels})` : temp;
 
 export default (request: Request, report: Report) => {
   const { days, temp, precip, lat, lon } = request;
@@ -16,23 +17,34 @@ export default (request: Request, report: Report) => {
         "Date",
         "Overall condition",
         "High / Low (ºC)",
-        "Total precip (mm)",
+        "Wind / Gusts (m/h)",
+        "Precip (mm) / Probability (%)",
       ],
       rows: report.map(({
         date,
-        condition,
-        accPrecip,
-        maxTemp,
-        minTemp,
-        minFeels,
-        maxFeels,
+        weather,
+        precipitationIntensity,
+        precipitationProbability,
+        temperatureMin,
+        temperatureMax,
+        temperatureApparentMin,
+        temperatureApparentMax,
+        windSpeed,
+        windGust,
       }) => [
-        `${date.toDateString()} (+${
-          Math.round((date.getTime() - Date.now()) / DAY_MS)
-        } days)`,
-        condition,
-        `${printTemp(maxTemp, maxFeels)} / ${printTemp(minTemp, minFeels)}`,
-        accPrecip,
+        `${date.toDateString()} (+${(date.getTime() - today().getTime()) /
+          DAY_MS} days)`,
+        weather,
+        [
+          printTemp(temperatureMax, temperatureApparentMax),
+          printTemp(temperatureMin, temperatureApparentMin),
+        ].join(
+          ` / `,
+        ),
+        [windSpeed, windGust].join(` / `),
+        precipitationProbability
+          ? [precipitationIntensity, precipitationProbability].join(` / `)
+          : "-",
       ]),
     });
 

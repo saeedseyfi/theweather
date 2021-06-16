@@ -1,34 +1,35 @@
-import { parse } from "./condition-code.ts";
-
-type ObservationValue = { value: number; units: string };
-
-export type Observation = {
-  observation_time: string;
-  min?: ObservationValue;
-  max?: ObservationValue;
+export type ApiResponse<F extends string> = {
+  code?: string;
+  message?: string;
+  data?: {
+    timelines?: {
+      timestep: string;
+      startTime: string;
+      endTime: string;
+      intervals: {
+        startTime: string;
+        values: {
+          [key in F]?: any;
+        };
+      }[];
+    }[];
+  };
 };
 
 export type DayForecast = {
-  temp: Observation[];
-  precipitation: Observation[];
-  precipitation_accumulation: ObservationValue;
-  feels_like: Observation[];
-  wind_speed: Observation[];
-  weather_code: { value: string };
-  observation_time: { value: string };
-  lat: number;
-  lon: number;
+  date: Date;
+  weather: string;
+  temperatureMin: number;
+  temperatureMax: number;
+  temperatureApparentMin: number;
+  temperatureApparentMax: number;
+  precipitationProbability: number;
+  precipitationIntensity: number;
+  windSpeed: number;
+  windGust: number;
 };
 
-export type Report = {
-  date: Date;
-  condition: string;
-  minTemp: number;
-  maxTemp: number;
-  minFeels: number;
-  maxFeels: number;
-  accPrecip: number;
-}[];
+export type Report = DayForecast[];
 
 export type Request = {
   lat: string;
@@ -36,4 +37,6 @@ export type Request = {
   days: string;
   temp: string;
   precip: string;
+  wind: string;
+  gust: string;
 };
