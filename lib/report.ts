@@ -12,7 +12,7 @@ export default (request: Request, report: Report) => {
   if (report.length > 0) {
     const table = new AsciiTable().parse({
       title:
-        `Filters: In coming ${days} days, above ${temp}ºC, precipitation <= ${precip}mm/hr , wind speed <= ${wind}m/h, wind gusts <= ${gust}m/h`,
+        `Filters: In coming ${days} days, above ${temp}ºC, precipitation <= ${precip}mm/hr, wind speed <= ${wind}m/h, wind gusts <= ${gust}m/h`,
       heading: [
         "Date",
         "Overall condition",
