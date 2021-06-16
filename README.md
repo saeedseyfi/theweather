@@ -18,7 +18,7 @@ echo CLIMACELL_APIKEY=your-api-key >> theweather/.env
 ## Run
 
 ```shell script
-deno run --allow-net=api.climacell.co --allow-read=. --allow-env mod.ts lat=59.3268711 lon=18.0702666
+deno run --allow-net=api.tomorrow.io --allow-read=. --allow-env mod.ts lat=59.3268711 lon=18.0702666
 ```
 
 Params:
@@ -36,6 +36,8 @@ lon=18.0702666  # location longitude
 days=14         # number of days to check (max 14)
 temp=20         # min temperature (ºC) 
 precip=1        # max precipitation (mm/hr)
+wind=8          # max wind speed (m/hr)
+gust=10         # max wind gusts (m/hr)
 ```
 
 You can make your command set an alias to check your vacation-friendly days ;)
