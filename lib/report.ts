@@ -7,12 +7,12 @@ const printTemp = (temp: number, feels: number) =>
   temp !== feels ? `${temp} (feels ${feels})` : temp;
 
 export default (request: Request, report: Report) => {
-  const { days, temp, precip, lat, lon } = request;
+  const { days, temp, precip, lat, lon, wind, gust } = request;
 
   if (report.length > 0) {
     const table = new AsciiTable().parse({
       title:
-        `Dates in coming ${days} days that are above ${temp}ºC that have bellow ${precip}mm/hr precipitation.`,
+        `Filters: In coming ${days} days, above ${temp}ºC, precipitation <= ${precip}mm/hr , wind speed <= ${wind}m/h, wind gusts <= ${gust}m/h`,
       heading: [
         "Date",
         "Overall condition",
