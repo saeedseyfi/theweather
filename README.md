@@ -1,4 +1,4 @@
-# How's the Weather for Vacation?
+# How's the weather for vacation?
 
 This script helps to find the best days in next two weeks to take vacation based
 on weather.
