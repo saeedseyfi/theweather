@@ -18,7 +18,7 @@ echo TOMORROW_APIKEY=your-api-key >> theweather/.env
 ## Run
 
 ```shell script
-deno run --allow-net=api.tomorrow.io --allow-read=. --allow-env mod.ts lat=59.3268711 lon=18.0702666
+deno run --allow-net=api.tomorrow.io,api.ipify.org,ipapi.co --allow-read=. --allow-env mod.ts
 ```
 
 Params:
@@ -33,7 +33,7 @@ mod.ts          # main script file
 # OPTIONAL
 lat=59.3268711  # location latitude
 lon=18.0702666  # location longitude
-days=14         # number of days to check (max 14)
+days=14         # number of days to check (max 15)
 temp=20         # min temperature (ºC) 
 precip=1        # max precipitation (mm/hr)
 wind=8          # max wind speed (m/hr)
