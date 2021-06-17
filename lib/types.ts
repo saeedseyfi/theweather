@@ -1,4 +1,4 @@
-export type ApiResponse<F extends string> = {
+export type TomorrowApiResponse<F extends string> = {
   code?: string;
   message?: string;
   data?: {
@@ -14,6 +14,14 @@ export type ApiResponse<F extends string> = {
       }[];
     }[];
   };
+};
+
+export type IpLocationApiResponse = {
+  latitude: number;
+  longitude: number;
+  timezone: string;
+  city: string;
+  [key: string]: any;
 };
 
 export type DayForecast = {

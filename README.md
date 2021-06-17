@@ -29,10 +29,10 @@ Params:
 --allow-read    # allows reading current directory (.env files)
 --allow-env     # allows access to env variables
 mod.ts          # main script file
-lat=59.3268711  # location latitude
-lon=18.0702666  # location longitude
 
 # OPTIONAL
+lat=59.3268711  # location latitude
+lon=18.0702666  # location longitude
 days=14         # number of days to check (max 14)
 temp=20         # min temperature (ºC) 
 precip=1        # max precipitation (mm/hr)

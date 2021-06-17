@@ -1,4 +1,5 @@
-import { DayForecast, Request } from "./lib/types.ts";
+import { getIPLocation } from "https://deno.land/x/ip_location@v1.0.0/mod.ts";
+import { DayForecast, IpLocationApiResponse, Request } from "./lib/types.ts";
 import args from "./lib/args.ts";
 import report from "./lib/report.ts";
 import { forecast } from "./lib/forecast.ts";
@@ -19,18 +20,27 @@ async function filter(
     );
 }
 
-const {
-  lat,
-  lon,
-  days = "15",
-  temp = "20",
-  precip = "1",
-  wind = "8",
-  gust = "10",
-} = args as Request;
+let { lat, lon } = args as Request;
+const { days = "15", temp = "20", precip = "1", wind = "8", gust = "10" } =
+  args as Request;
 
 if (!lat || !lon) {
-  throw new Error("lat/lon args are required");
+  try {
+    const ipLocation: IpLocationApiResponse = await getIPLocation();
+    lat = String(ipLocation.latitude);
+    lon = String(ipLocation.longitude);
+    console.log(
+      `Fetching weather forecast for ${ipLocation.city}(${lat},${lon})...`,
+    );
+  } catch (e) {
+    console.error(e);
+  }
+
+  if (!lat || !lon) {
+    throw new Error(
+      "Unable to fetch location, provide lat/lon args or check location API.",
+    );
+  }
 }
 
 const filteredDays = await filter(
