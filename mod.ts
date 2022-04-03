@@ -1,10 +1,10 @@
 import { getIPLocation } from "https://deno.land/x/ip_location@v1.0.0/mod.ts";
-import { DayForecast, IpLocationApiResponse, Request } from "./lib/types.ts";
-import args from "./lib/args.ts";
+import { parse } from "https://deno.land/std@0.133.0/flags/mod.ts";
+import { DayForecast, IpLocationApiResponse } from "./lib/types.ts";
 import report from "./lib/report.ts";
 import { forecast } from "./lib/forecast.ts";
 
-async function filter(
+function filter(
   days: DayForecast[],
   desiredMinTemp: number,
   desiredMaxPrecip: number,
@@ -20,9 +20,10 @@ async function filter(
     );
 }
 
-let { lat, lon } = args as Request;
+const args = parse(Deno.args);
+let { lat, lon } = args;
 const { days = "15", temp = "20", precip = "1", wind = "8", gust = "10" } =
-  args as Request;
+  args;
 
 if (!lat || !lon) {
   try {
@@ -43,7 +44,7 @@ if (!lat || !lon) {
   }
 }
 
-const filteredDays = await filter(
+const filteredDays = filter(
   await forecast(lat, lon, Number(days)),
   Number(temp),
   Number(precip),

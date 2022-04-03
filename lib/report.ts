@@ -2,11 +2,12 @@ import AsciiTable from "https://deno.land/x/ascii_table@v0.1.0/mod.ts";
 import { DAY_MS } from "./constants.ts";
 import { Report, Request } from "./types.ts";
 import { today } from "./utils.ts";
+import { getDailyForecastUrl } from "./details.ts";
 
 const printTemp = (temp: number, feels: number) =>
   temp !== feels ? `${temp} (feels ${feels})` : temp;
 
-export default (request: Request, report: Report) => {
+export default async (request: Request, report: Report) => {
   const { days, temp, precip, lat, lon, wind, gust } = request;
 
   if (report.length > 0) {
@@ -32,8 +33,10 @@ export default (request: Request, report: Report) => {
         windSpeed,
         windGust,
       }) => [
-        `${date.toDateString()} (+${(date.getTime() - today().getTime()) /
-          DAY_MS} days)`,
+        `${date.toDateString()} (+${
+          (date.getTime() - today().getTime()) /
+          DAY_MS
+        } days)`,
         weather,
         [
           printTemp(temperatureMax, temperatureApparentMax),
@@ -52,7 +55,7 @@ export default (request: Request, report: Report) => {
 
     console.log(
       "More details:",
-      `https://weather.com/weather/monthly/l/${lat},${lon}`,
+      await getDailyForecastUrl(lat, lon),
     );
   } else {
     console.error(`Oops no date matched the given criteria.`);

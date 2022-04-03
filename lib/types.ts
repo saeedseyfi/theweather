@@ -1,4 +1,4 @@
-export type TomorrowApiResponse<F extends string> = {
+export type TomorrowApiForcastResponse<F extends string> = {
   code?: string;
   message?: string;
   data?: {
@@ -12,6 +12,40 @@ export type TomorrowApiResponse<F extends string> = {
           [key in F]?: any;
         };
       }[];
+    }[];
+  };
+};
+
+export type TomorrowApiNearbyResponse = {
+  code?: string;
+  message?: string;
+  data?: {
+    cities?: {
+      isCapital?: boolean;
+      id?: string;
+      stateCode?: string;
+      countryCode?: string;
+      population?: number;
+      name?: string;
+      state?: string;
+      country?: string;
+      lat?: number;
+      lng?: number;
+      timezone?: string;
+      locationType?: string;
+      originalName?: string;
+    }[];
+    places?: {
+      id?: string;
+      countryCode?: string;
+      type?: string;
+      class?: string;
+      name?: string;
+      country?: string;
+      lat?: number;
+      lng?: number;
+      timezone?: string;
+      locationType?: string;
     }[];
   };
 };

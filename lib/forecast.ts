@@ -1,4 +1,4 @@
-import { DayForecast, TomorrowApiResponse } from "./types.ts";
+import { DayForecast, TomorrowApiForcastResponse } from "./types.ts";
 import { createUrl } from "./utils.ts";
 import { DAY_MS } from "./constants.ts";
 import { parse } from "./weather-code.ts";
@@ -39,7 +39,7 @@ export function forecast(
     { headers: { "content-type": "application/json" } },
   )
     .then((res) =>
-      res.json() as Promise<TomorrowApiResponse<typeof fields[number]>>
+      res.json() as Promise<TomorrowApiForcastResponse<typeof fields[number]>>
     )
     .then((res) => {
       const intervals = res?.data?.timelines?.[0]?.intervals;
