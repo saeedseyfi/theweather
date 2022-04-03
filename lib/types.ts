@@ -1,4 +1,4 @@
-export type TomorrowApiForcastResponse<F extends string> = {
+export type TomorrowApiForecastResponse<F extends string> = {
   code?: string;
   message?: string;
   data?: {
@@ -55,7 +55,7 @@ export type IpLocationApiResponse = {
   longitude: number;
   timezone: string;
   city: string;
-  [key: string]: any;
+  [key: string]: unknown;
 };
 
 export type DayForecast = {
@@ -73,12 +73,12 @@ export type DayForecast = {
 
 export type Report = DayForecast[];
 
-export type Request = {
-  lat: string;
-  lon: string;
-  days: string;
-  temp: string;
-  precip: string;
-  wind: string;
-  gust: string;
+export type ParsedArgs = {
+  lat: number;
+  lon: number;
+  days: number;
+  temp: number;
+  precip: number;
+  wind: number;
+  gust: number;
 };

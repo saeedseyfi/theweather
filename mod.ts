@@ -1,55 +1,8 @@
-import { getIPLocation } from "https://deno.land/x/ip_location@v1.0.0/mod.ts";
-import { parse } from "https://deno.land/std@0.133.0/flags/mod.ts";
-import { DayForecast, IpLocationApiResponse } from "./lib/types.ts";
-import report from "./lib/report.ts";
+import { report } from "./lib/report.ts";
 import { forecast } from "./lib/forecast.ts";
+import { filter } from "./lib/filter.ts";
+import args from "./lib/args.ts";
 
-function filter(
-  days: DayForecast[],
-  desiredMinTemp: number,
-  desiredMaxPrecip: number,
-  desiredMaxWind: number,
-  desiredMaxWindGusts: number,
-) {
-  return days
-    .filter(({ temperatureMax, precipitationIntensity, windSpeed, windGust }) =>
-      temperatureMax >= desiredMinTemp &&
-      precipitationIntensity <= desiredMaxPrecip &&
-      windSpeed <= desiredMaxWind &&
-      windGust <= desiredMaxWindGusts
-    );
-}
-
-const args = parse(Deno.args);
-let { lat, lon } = args;
-const { days = "15", temp = "20", precip = "1", wind = "8", gust = "10" } =
-  args;
-
-if (!lat || !lon) {
-  try {
-    const ipLocation: IpLocationApiResponse = await getIPLocation();
-    lat = String(ipLocation.latitude);
-    lon = String(ipLocation.longitude);
-    console.log(
-      `Fetching weather forecast for ${ipLocation.city}(${lat},${lon})...`,
-    );
-  } catch (e) {
-    console.error(e);
-  }
-
-  if (!lat || !lon) {
-    throw new Error(
-      "Unable to fetch location, provide lat/lon args or check location API.",
-    );
-  }
-}
-
-const filteredDays = filter(
-  await forecast(lat, lon, Number(days)),
-  Number(temp),
-  Number(precip),
-  Number(wind),
-  Number(gust),
-);
-
-await report({ lat, lon, days, temp, precip, wind, gust }, filteredDays);
+const nextDays = await forecast(args);
+const filteredDays = filter(nextDays, args);
+await report(filteredDays, args);

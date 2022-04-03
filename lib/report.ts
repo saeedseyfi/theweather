@@ -1,13 +1,13 @@
 import AsciiTable from "https://deno.land/x/ascii_table@v0.1.0/mod.ts";
 import { DAY_MS } from "./constants.ts";
-import { Report, Request } from "./types.ts";
+import { ParsedArgs, Report } from "./types.ts";
 import { today } from "./utils.ts";
 import { getDailyForecastUrl } from "./details.ts";
 
 const printTemp = (temp: number, feels: number) =>
   temp !== feels ? `${temp} (feels ${feels})` : temp;
 
-export default async (request: Request, report: Report) => {
+export async function report(report: Report, request: ParsedArgs) {
   const { days, temp, precip, lat, lon, wind, gust } = request;
 
   if (report.length > 0) {
@@ -61,4 +61,4 @@ export default async (request: Request, report: Report) => {
     console.error(`Oops no date matched the given criteria.`);
     Deno.exit(1);
   }
-};
+}

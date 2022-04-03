@@ -1,4 +1,8 @@
-import { DayForecast, TomorrowApiForcastResponse } from "./types.ts";
+import {
+  DayForecast,
+  ParsedArgs,
+  TomorrowApiForecastResponse,
+} from "./types.ts";
 import { createUrl } from "./utils.ts";
 import { DAY_MS } from "./constants.ts";
 import { parse } from "./weather-code.ts";
@@ -6,11 +10,8 @@ import config from "./config.ts";
 
 const { TOMORROW_APIKEY } = config;
 
-export function forecast(
-  lat: string | number,
-  lon: string | number,
-  days: number = 7,
-): Promise<DayForecast[]> {
+export function forecast(request: ParsedArgs): Promise<DayForecast[]> {
+  const { lat, lon, days } = request;
   const fields = [
     "weatherCode",
     "temperatureMin",
@@ -39,7 +40,7 @@ export function forecast(
     { headers: { "content-type": "application/json" } },
   )
     .then((res) =>
-      res.json() as Promise<TomorrowApiForcastResponse<typeof fields[number]>>
+      res.json() as Promise<TomorrowApiForecastResponse<typeof fields[number]>>
     )
     .then((res) => {
       const intervals = res?.data?.timelines?.[0]?.intervals;
