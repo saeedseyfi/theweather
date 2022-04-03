@@ -40,4 +40,4 @@ mod.ts          # main script file
 --gust=10         # max wind gusts (m/hr)
 ```
 
-You can make your command set an alias to check your vacation-friendly days ;)
+You can make your command set an alias to find your vacation-friendly days ;)
